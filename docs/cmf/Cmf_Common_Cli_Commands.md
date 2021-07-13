@@ -103,6 +103,30 @@ The command types.
 #### Returns
 [System.CommandLine.Command](https://docs.microsoft.com/en-us/dotnet/api/System.CommandLine.Command 'System.CommandLine.Command')  
   
+<a name='Cmf_Common_Cli_Commands_BaseCommand_Parse_T_(System_CommandLine_Parsing_ArgumentResult_string)'></a>
+## BaseCommand.Parse&lt;T&gt;(ArgumentResult, string) Method
+parse argument/option  
+```csharp
+protected T Parse<T>(System.CommandLine.Parsing.ArgumentResult argResult, string @default)
+    where T : System.IO.Abstractions.IDirectoryInfo;
+```
+#### Type parameters
+<a name='Cmf_Common_Cli_Commands_BaseCommand_Parse_T_(System_CommandLine_Parsing_ArgumentResult_string)_T'></a>
+`T`  
+the (target) type of the argument/parameter
+  
+#### Parameters
+<a name='Cmf_Common_Cli_Commands_BaseCommand_Parse_T_(System_CommandLine_Parsing_ArgumentResult_string)_argResult'></a>
+`argResult` [System.CommandLine.Parsing.ArgumentResult](https://docs.microsoft.com/en-us/dotnet/api/System.CommandLine.Parsing.ArgumentResult 'System.CommandLine.Parsing.ArgumentResult')  
+the arguments to parse
+  
+<a name='Cmf_Common_Cli_Commands_BaseCommand_Parse_T_(System_CommandLine_Parsing_ArgumentResult_string)_default'></a>
+`default` [System.String](https://docs.microsoft.com/en-us/dotnet/api/System.String 'System.String')  
+the default value if no value is passed for the argument
+  
+#### Returns
+[T](Cmf_Common_Cli_Commands.md#Cmf_Common_Cli_Commands_BaseCommand_Parse_T_(System_CommandLine_Parsing_ArgumentResult_string)_T 'Cmf.Common.Cli.Commands.BaseCommand.Parse&lt;T&gt;(System.CommandLine.Parsing.ArgumentResult, string).T')  
+  
   
 <a name='Cmf_Common_Cli_Commands_BuildCommand'></a>
 ## BuildCommand Class
