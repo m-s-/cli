@@ -46,7 +46,7 @@ namespace Cmf.Common.Cli.Handlers
                     Task = "install",
                     DisplayName = "Gulp Install",
                     GulpJS = "node_modules/gulp/bin/gulp.js",
-                    Args = new [] { "--update" },
+                    Args = new [] { "--update", "--no-clean" },
                     WorkingDirectory = cmfPackage.GetFileInfo().Directory
                 },
                 new GulpCommand()
@@ -61,6 +61,7 @@ namespace Cmf.Common.Cli.Handlers
             };
 
             DFPackageType = PackageType.Presentation;
+            this.DependenciesFolder = this.fileSystem.DirectoryInfo.FromDirectoryName("./apps/customization.web/node_modules");
         }
     }
 }

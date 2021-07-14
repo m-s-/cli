@@ -892,6 +892,24 @@
             <exception cref="T:Cmf.Common.Cli.Objects.CmfPackageCollection">
             </exception>
         </member>
+        <member name="T:Cmf.Common.Cli.Commands.restore.RestoreCommand">
+            <summary>
+            Restore package dependencies (declared cmfpackage.json) from repository packages
+            </summary>
+        </member>
+        <member name="M:Cmf.Common.Cli.Commands.restore.RestoreCommand.Configure(System.CommandLine.Command)">
+            <summary>
+            Configure the Restore command options and arguments 
+            </summary>
+            <param name="cmd"></param>
+        </member>
+        <member name="M:Cmf.Common.Cli.Commands.restore.RestoreCommand.Execute(System.IO.Abstractions.IDirectoryInfo,System.String)">
+            <summary>
+            Execute the restore command
+            </summary>
+            <param name="packagePath">The path of the current package folder</param>
+            <param name="repo">The package repository URI/path</param>
+        </member>
         <member name="T:Cmf.Common.Cli.Constants.CliConstants">
              <summary>
             
@@ -1446,6 +1464,11 @@
             The default content to ignore.
             </value>
         </member>
+        <member name="P:Cmf.Common.Cli.Handlers.PackageTypeHandler.DependenciesFolder">
+            <summary>
+            Where should the dependencies go, relative to the cmfpackage.json file
+            </summary>
+        </member>
         <member name="M:Cmf.Common.Cli.Handlers.PackageTypeHandler.#ctor(Cmf.Common.Cli.Objects.CmfPackage)">
             <summary>
             Initializes a new instance of the <see cref="T:Cmf.Common.Cli.Handlers.PackageTypeHandler" /> class.
@@ -1515,6 +1538,13 @@
             </summary>
             <param name="packageOutputDir">The package output dir.</param>
             <param name="outputDir">The output dir.</param>
+        </member>
+        <member name="M:Cmf.Common.Cli.Handlers.PackageTypeHandler.RestoreDependencies(System.Uri)">
+            <summary>
+            Restore the the current package's dependencies to the dependencies folder
+            </summary>
+            <param name="repoUri">The Uri for the package repo</param>
+            <exception cref="T:Cmf.Common.Cli.Utilities.CliException">thrown when repo uri is not available or in an incorrect format</exception>
         </member>
         <member name="T:Cmf.Common.Cli.Handlers.PresentationPackageTypeHandler">
              <summary>
@@ -1632,6 +1662,11 @@
             </summary>
             <param name="packageOutputDir">The package output dir.</param>
             <param name="outputDir">The output dir.</param>
+        </member>
+        <member name="M:Cmf.Common.Cli.Interfaces.IPackageTypeHandler.RestoreDependencies(System.Uri)">
+            <summary>
+            Restore package dependencies (declared cmfpackage.json) from repository packages
+            </summary>
         </member>
         <member name="T:Cmf.Common.Cli.Log">
              <summary>

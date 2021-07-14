@@ -62,6 +62,11 @@ namespace Cmf.Common.Cli.Handlers
         /// The default content to ignore.
         /// </value>
         public List<string> DefaultContentToIgnore { get; }
+        
+        /// <summary>
+        /// Where should the dependencies go, relative to the cmfpackage.json file
+        /// </summary>
+        public IDirectoryInfo DependenciesFolder { get; protected set; }
 
         #endregion
 
@@ -507,6 +512,139 @@ namespace Cmf.Common.Cli.Handlers
             FinalArchive(packageOutputDir, outputDir);
 
             Log.Information($"{CmfPackage.PackageName} created");
+        }
+        
+        /// <summary>
+        /// Restore the the current package's dependencies to the dependencies folder
+        /// </summary>
+        /// <param name="repoUri">The Uri for the package repo</param>
+        /// <exception cref="CliException">thrown when repo uri is not available or in an incorrect format</exception>
+        public virtual void RestoreDependencies(Uri repoUri)
+        {
+            Log.Debug($"Using repo at {repoUri}");
+            Log.Debug($"Targeting depencies folder at {this.DependenciesFolder.FullName}");
+            if (this.CmfPackage.Dependencies == null)
+            {
+                Log.Information($"No dependencies declared for package {this.CmfPackage.PackageName}");
+                return;
+            }
+            else
+            {
+                Log.Verbose($"Package {this.CmfPackage.PackageName} declares {this.CmfPackage.Dependencies.Count} dependencies. Restoring...");
+            }
+            foreach (var dependency in this.CmfPackage.Dependencies)
+            {
+                string dependencyFileName = $"{dependency.Id}.{dependency.Version}.zip";
+                bool dependencyFound = false;
+                // obtain package from repo
+                Log.Debug($"Processing dependency {dependencyFileName}");
+                if (repoUri != null)
+                {
+                    if (repoUri.IsDirectory())
+                    {
+                        Log.Debug($"Repo is a directory");
+                        DirectoryInfo repoDirectory = new(repoUri.OriginalString);
+
+                        if (repoDirectory.Exists)
+                        {
+                            Log.Debug($"Repo exists");
+                            // Search by Packages already Packed
+                            FileInfo[] dependencyFiles = repoDirectory.GetFiles(dependencyFileName);
+                            dependencyFound = dependencyFiles.HasAny();
+
+                            if (!dependencyFound)
+                            {
+                                // TODO: link? maybe?
+                                Log.Warning($"Dependency {dependencyFileName} not found!");
+                            }
+                            else
+                            {
+                                Log.Verbose($"Located dependency {dependencyFileName} in repository. Unpacking...");
+                                foreach (FileInfo dependencyFile in dependencyFiles)
+                                {
+                                    var zipFile = System.IO.Compression.ZipFile.Open(dependencyFile.FullName, ZipArchiveMode.Read);
+
+                                    // these tuples allow us to rewrite entry paths
+                                    var entriesToExtract = new List<Tuple<ZipArchiveEntry, string>>();
+                                    
+                                    var manifest = zipFile.GetEntry("manifest.xml");
+                                    // var pkgManifestFile = Path.Join(Path.GetTempPath(), $"{dependency.Id}.{dependency.Version}-manifest.xml");
+                                    using (var stream = manifest.Open())
+                                    {
+                                        XDocument dfManifest = XDocument.Load(stream);
+                                        XElement rootNode = dfManifest.Element("deploymentPackage", true);
+                                        if (rootNode == null)
+                                        {
+                                            throw new CliException(CliMessages.InvalidManifestFile);
+                                        }
+
+                                        var pkgType = rootNode.Element("packagetype", true);
+                                        
+                                        // maybe this should be configurable
+                                        if (pkgType?.Value?.IgnoreCaseEquals("presentation") ?? false)
+                                        {
+                                            const string node_modules = "node_modules/";
+                                            // presentation packages are different, as only the content of the node_modules is of interest to us
+                                            Log.Debug("Extracting node_modules contents to target");
+                                            entriesToExtract.AddRange(
+                                                zipFile.Entries
+                                                    .Where(entry => entry.FullName.StartsWith(node_modules))
+                                                    .Select(entry => new Tuple<ZipArchiveEntry, string>(entry, entry.FullName.Substring(node_modules.Length)))
+                                                );
+                                        }
+                                        else
+                                        {
+                                            Log.Debug("Extracting everything to target");
+                                            entriesToExtract.AddRange(zipFile.Entries.Select(entry => new Tuple<ZipArchiveEntry, string>(entry, entry.FullName)));
+                                        }
+                                    }
+                                    
+                                    foreach (var entry in entriesToExtract)
+                                    {
+                                        var target = Path.Join(this.DependenciesFolder.FullName, entry.Item2);
+                                        var targetDir = Path.GetDirectoryName(target);
+                                        if (target.EndsWith("/"))
+                                        {
+                                            // this a dotnet bug: if a folder contains a ., the library assumes it's a file and adds it as an entry
+                                            // however, afterwards all folder contents are separate entries, so we can just skip these
+                                            continue;
+                                        }
+
+                                        if (!File.Exists(target)) // TODO: support overwriting if requested
+                                        {
+                                            Log.Debug($"Extracting {entry.Item1.FullName} to {target}");
+                                            if (!string.IsNullOrEmpty(targetDir))
+                                            {
+                                                Directory.CreateDirectory(targetDir);
+                                            }
+
+                                            ;
+                                            entry.Item1.ExtractToFile(target);
+                                        }
+                                        else
+                                        {
+                                            Log.Debug($"Skipping {target}, file exists");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Log.Error($"Can't open specified repository '{repoUri.OriginalString}'! Does it exist? ");
+                        }
+                    }
+                    else
+                    {
+                        throw new CliException(CliMessages.UrlsNotSupported);
+                    }
+                }
+                else
+                {
+                    Log.Error($"Can't find packages as no repository could be resolved. Please specify a valid repository path!");
+                }
+                // unpack to dependencies folder
+            }
         }
 
         #endregion

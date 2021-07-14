@@ -59,6 +59,8 @@ namespace Cmf.Common.Cli.Handlers
                     WorkingDirectory = cmfPackage.GetFileInfo().Directory
                 }
             };
+            
+            DependenciesFolder = this.fileSystem.DirectoryInfo.FromDirectoryName("./Dependencies");
         }
 
         /// <summary>

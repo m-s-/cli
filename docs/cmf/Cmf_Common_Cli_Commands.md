@@ -20,6 +20,7 @@ Derived
 &#8627; [PluginCommand](Cmf_Common_Cli_Commands.md#Cmf_Common_Cli_Commands_PluginCommand 'Cmf.Common.Cli.Commands.PluginCommand')  
 &#8627; [PowershellCommand](Cmf_Common_Cli_Commands.md#Cmf_Common_Cli_Commands_PowershellCommand 'Cmf.Common.Cli.Commands.PowershellCommand')  
 &#8627; [PublishCommand](Cmf_Common_Cli_Commands.md#Cmf_Common_Cli_Commands_PublishCommand 'Cmf.Common.Cli.Commands.PublishCommand')  
+&#8627; [RestoreCommand](Cmf_Common_Cli_Commands_restore.md#Cmf_Common_Cli_Commands_restore_RestoreCommand 'Cmf.Common.Cli.Commands.restore.RestoreCommand')  
 ### Constructors
 <a name='Cmf_Common_Cli_Commands_BaseCommand_BaseCommand()'></a>
 ## BaseCommand.BaseCommand() Constructor
