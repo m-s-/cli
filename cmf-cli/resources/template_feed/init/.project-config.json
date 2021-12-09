@@ -30,5 +30,6 @@
   "TemporaryPath": "<%= $CLI_PARAM_TemporaryPath %>",
   "HTMLPort": "<%= $CLI_PARAM_HTMLPort %>",
   "GatewayPort": "<%= $CLI_PARAM_GatewayPort %>",
+  "DefaultScaffoldingTarget": "<%= $CLI_PARAM_DefaultScaffoldingTarget %>",
   "ReleaseEnvironmentConfig": "<%= $CLI_PARAM_ReleaseEnvironmentConfig %>"
 }

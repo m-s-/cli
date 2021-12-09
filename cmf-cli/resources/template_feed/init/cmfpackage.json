@@ -6,5 +6,16 @@
   "isInstallable": true,
   "isUniqueInstall": false,
   "dependencies": [
+  //#if (defaultScaffoldingTarget == "DeploymentFramework")
+    {
+      "id": "CriticalManufacturing",
+      "version": "<%= $CLI_PARAM_MESVersion %>"
+    }
+  ////#else
+    {
+      "id": "Cmf.Environment",
+      "version": "<%= $CLI_PARAM_MESVersion %>"
+    }
+  //#endif
   ]
 }

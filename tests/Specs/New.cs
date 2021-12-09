@@ -1,10 +1,13 @@
 using System;
 using System.CommandLine;
+using System.CommandLine.Invocation;
 using System.CommandLine.IO;
 using System.Diagnostics;
 using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using Cmf.Common.Cli.Commands;
+using Cmf.Common.Cli.Enums;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace tests.Specs
@@ -138,6 +141,48 @@ namespace tests.Specs
                 Directory.SetCurrentDirectory(cur);
                 Directory.Delete(tmp, true);
             }
+        }
+        
+        [TestMethod]
+        public void New_Target()
+        {
+            ScaffoldingTarget? _target = null;
+
+            var packCommand = new NewCommand();
+            var cmd = new Command("new");
+            packCommand.Configure(cmd);
+
+            cmd.Handler = CommandHandler.Create<bool, ScaffoldingTarget>(
+                (reset, target) =>
+                {
+                    _target = target;
+                });
+
+            var console = new TestConsole();
+            cmd.Invoke(new[] {
+                "--target", "df"
+            }, console);
+            Assert.AreEqual(ScaffoldingTarget.DeploymentFramework, _target);
+            
+            cmd.Invoke(new[] {
+                "--target", "deploymentframework"
+            }, console);
+            Assert.AreEqual(ScaffoldingTarget.DeploymentFramework, _target);
+            
+            cmd.Invoke(new[] {
+                "--target", "doc"
+            }, console);
+            Assert.AreEqual(ScaffoldingTarget.DevOpsCenter, _target);
+            
+            cmd.Invoke(new[] {
+                "--target", "devopscenter"
+            }, console);
+            Assert.AreEqual(ScaffoldingTarget.DevOpsCenter, _target);
+            
+            cmd.Invoke(new[] {
+                "--target", "xpto"
+            }, console);
+            Assert.AreEqual(ScaffoldingTarget.DevOpsCenter, _target);
         }
     }
 }

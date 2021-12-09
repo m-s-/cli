@@ -36,6 +36,13 @@
       "displayName": "Package Name",
       "replaces": "<%= $CLI_PARAM_CustomPackageName %>"
     },
+    "defaultScaffoldingTarget": {
+      "type": "parameter",
+      "datatype": "string",
+      "description": "The default scaffolding target",
+      "displayName": "Default Scaffolding Target",
+      "replaces": "<%= $CLI_PARAM_DefaultScaffoldingTarget %>"
+    },
     "packageVersion": {
       "type": "parameter",
       "datatype": "string",

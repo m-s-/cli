@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO.Abstractions;
+using Cmf.Common.Cli.Enums;
 using Cmf.Common.Cli.Utilities;
 using Newtonsoft.Json;
 using Cmf.Common.Cli.Constants;
@@ -35,6 +36,7 @@ namespace Cmf.Common.Cli.Commands
         public IDirectoryInfo workingDir { get; set; }
         public string projectName { get; set; }
         public string rootPackageName { get; set; }
+        public ScaffoldingTarget target { get; set; }
         public string version { get; set; }
         public IFileInfo config { get; set; }
         public IDirectoryInfo deploymentDir { get; set; }
@@ -102,6 +104,27 @@ namespace Cmf.Common.Cli.Commands
             {
                 Description = "Working Directory"
             });
+            cmd.AddOption(new Option<ScaffoldingTarget>(
+                aliases: new[] { "--target" },
+                parseArgument: result =>
+                {
+                    if (result.Tokens.Count == 1)
+                    {
+                        switch (result.Tokens[0].Value?.ToLowerInvariant())
+                        {
+                            case "df":
+                            case "deploymentframework":
+                                return ScaffoldingTarget.DeploymentFramework;
+                            case "doc":
+                            case "devopscenter":
+                                return ScaffoldingTarget.DevOpsCenter;
+                        }
+                    }
+                    return ScaffoldingTarget.DevOpsCenter;
+                },
+                isDefault: true,
+                description: "Scaffolding target: DevOps Center (DOC, default) or Deployment Framework (DF)"
+            ));
             cmd.AddOption(new Option<string>(
                 aliases: new[] { "--version" },
                 description: "Package Version",
@@ -233,6 +256,8 @@ namespace Cmf.Common.Cli.Commands
                 "--customPackageName", x.rootPackageName,
                 "--projectName", x.projectName
             };
+            
+            args.AddRange(new []{ "--defaultScaffoldingTarget", x.target.ToString() });
 
             if (x.version != null)
             {

@@ -1123,15 +1123,18 @@ public override void Configure(System.CommandLine.Command cmd);
 `cmd` [System.CommandLine.Command](https://docs.microsoft.com/en-us/dotnet/api/System.CommandLine.Command 'System.CommandLine.Command')  
   
   
-<a name='Cmf_Common_Cli_Commands_NewCommand_Execute(bool)'></a>
-## NewCommand.Execute(bool) Method
+<a name='Cmf_Common_Cli_Commands_NewCommand_Execute(bool_Cmf_Common_Cli_Enums_ScaffoldingTarget)'></a>
+## NewCommand.Execute(bool, ScaffoldingTarget) Method
 Execute command  
 ```csharp
-public void Execute(bool reset);
+public void Execute(bool reset, Cmf.Common.Cli.Enums.ScaffoldingTarget target);
 ```
 #### Parameters
-<a name='Cmf_Common_Cli_Commands_NewCommand_Execute(bool)_reset'></a>
+<a name='Cmf_Common_Cli_Commands_NewCommand_Execute(bool_Cmf_Common_Cli_Enums_ScaffoldingTarget)_reset'></a>
 `reset` [System.Boolean](https://docs.microsoft.com/en-us/dotnet/api/System.Boolean 'System.Boolean')  
+  
+<a name='Cmf_Common_Cli_Commands_NewCommand_Execute(bool_Cmf_Common_Cli_Enums_ScaffoldingTarget)_target'></a>
+`target` [Cmf.Common.Cli.Enums.ScaffoldingTarget](https://docs.microsoft.com/en-us/dotnet/api/Cmf.Common.Cli.Enums.ScaffoldingTarget 'Cmf.Common.Cli.Enums.ScaffoldingTarget')  
   
   
   

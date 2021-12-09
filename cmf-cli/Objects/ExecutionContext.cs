@@ -1,5 +1,8 @@
+using System;
 using Cmf.Common.Cli.Utilities;
 using System.IO.Abstractions;
+using System.Text.Json;
+using Cmf.Common.Cli.Enums;
 
 namespace Cmf.Common.Cli.Objects
 {
@@ -25,6 +28,11 @@ namespace Cmf.Common.Cli.Objects
         /// The current execution RepositoriesConfig object
         /// </summary>
         public RepositoriesConfig RepositoriesConfig { get; set; }
+
+        /// <summary>
+        /// What installation target are we scaffolding for
+        /// </summary>
+        public ScaffoldingTarget ScaffoldingTarget { get; set; }
 
         private ExecutionContext(IFileSystem fileSystem)
         {

@@ -924,6 +924,15 @@ public Cmf.Common.Cli.Objects.RepositoriesConfig RepositoriesConfig { get; set; 
 #### Property Value
 [RepositoriesConfig](Cmf_Common_Cli_Objects.md#Cmf_Common_Cli_Objects_RepositoriesConfig 'Cmf.Common.Cli.Objects.RepositoriesConfig')
   
+<a name='Cmf_Common_Cli_Objects_ExecutionContext_ScaffoldingTarget'></a>
+## ExecutionContext.ScaffoldingTarget Property
+What installation target are we scaffolding for  
+```csharp
+public Cmf.Common.Cli.Enums.ScaffoldingTarget ScaffoldingTarget { get; set; }
+```
+#### Property Value
+[Cmf.Common.Cli.Enums.ScaffoldingTarget](https://docs.microsoft.com/en-us/dotnet/api/Cmf.Common.Cli.Enums.ScaffoldingTarget 'Cmf.Common.Cli.Enums.ScaffoldingTarget')
+  
 ### Methods
 <a name='Cmf_Common_Cli_Objects_ExecutionContext_Initialize(System_IO_Abstractions_IFileSystem)'></a>
 ## ExecutionContext.Initialize(IFileSystem) Method
