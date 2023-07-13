@@ -427,6 +427,12 @@
       "defaultValue": "",
       "replaces": "<%= $CLI_PARAM_ReleaseEnvironmentConfig %>"
     },
+    "AppConfig": {
+      "type": "parameter",
+      "datatype": "string",
+      "defaultValue": "",
+      "replaces": "<%= $CLI_PARAM_AppConfig %>"
+    },
     "releaseCustomerEnvironment": {
       "type": "parameter",
       "datatype": "string",

@@ -27,6 +27,7 @@ namespace Cmf.CLI.Commands
         public string rootPackageName { get; set; }
         public string version { get; set; }
         public IFileInfo config { get; set; }
+        public IFileInfo appConfig { get; set; }
         public IDirectoryInfo deploymentDir { get; set; }
         public string BaseVersion { get; set; }
         public string DevTasksVersion { get; set; }
@@ -97,8 +98,14 @@ namespace Cmf.CLI.Commands
                 aliases: new[] { "-c", "--config" },
                 parseArgument: argResult => Parse<IFileInfo>(argResult),
                 isDefault: true,
-                description: "Configuration file exported from Setup")
-                { IsRequired = true });
+                description: "Configuration file exported from Setup or DevOps Center. Starting from v10, this pertains to the Convergence environment."
+            ) { IsRequired = true });
+            cmd.AddOption(new Option<IFileInfo>(
+                aliases: new[] { "-ac", "--appConfig" },
+                parseArgument: argResult => Parse<IFileInfo>(argResult),
+                isDefault: true,
+                description: "Configuration file exported from the target application, required if this solution targets an application environment. Applies only starting from v10."
+            ) { IsRequired = true });
             cmd.AddOption(new Option<RepositoryType>(
                     aliases: new[] { "-t", "--repositoryType" },
                     getDefaultValue: () => CliConstants.DefaultRepositoryType,
@@ -325,12 +332,23 @@ namespace Cmf.CLI.Commands
                 args.AddRange(ParseConfigFile(x.config));
             }
 
+            if (x.appConfig != null)
+            {
+                args.AddRange(new [] { "--AppConfig", x.appConfig.Name });
+            }
+
             this.RunCommand(args);
 
             if (x.config != null)
             {
                 var envConfigPath = this.fileSystem.Path.Join(FileSystemUtilities.GetProjectRoot(this.fileSystem, throwException: true).FullName, "EnvironmentConfigs");
                 x.config.CopyTo(this.fileSystem.Path.Join(envConfigPath, x.config.Name));
+                this.fileSystem.FileInfo.New(this.fileSystem.Path.Join(envConfigPath, ".gitkeep")).Delete();
+            }
+            if (x.appConfig != null)
+            {
+                var envConfigPath = this.fileSystem.Path.Join(FileSystemUtilities.GetProjectRoot(this.fileSystem, throwException: true).FullName, "EnvironmentConfigs");
+                x.appConfig.CopyTo(this.fileSystem.Path.Join(envConfigPath, x.appConfig.Name));
                 this.fileSystem.FileInfo.New(this.fileSystem.Path.Join(envConfigPath, ".gitkeep")).Delete();
             }
         }
