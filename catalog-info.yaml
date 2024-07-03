@@ -1,0 +1,29 @@
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: "criticalmanufacturing-cli"
+  title: "@criticalmanufacturing/cli"
+  description: CLI to scaffold, build and pack your Critical Manufacturing artifacts
+  annotations:
+    github.com/project-slug: m-s-/cli
+    backstage.io/source-location: url:https://github.com/criticalmanufacturing/cli/
+    backstage.io/techdocs-ref: url:https://criticalmanufacturing.github.io/cli/
+  tags:
+    - npm
+    - csharp
+    - dotnet
+  links:
+    - url: https://criticalmanufacturing.github.io/cli/
+      name: Documentation
+      icon: docs
+    - url: https://github.com/criticalmanufacturing/cli/
+      name: Git Repo
+      icon: github
+    - url: https://github.com/criticalmanufacturing/cli/issues?q=sort%3Aupdated-desc+is%3Aissue+is%3Aopen
+      name: Open Issues
+      icon: help
+spec:
+  type: tool
+  lifecycle: production
+  owner: developer-experience
