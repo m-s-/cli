@@ -303,13 +303,19 @@ namespace Cmf.CLI.Commands
 
             if (x.deploymentDir != null)
             {
-                args.AddRange(new [] {"--deploymentDir", x.deploymentDir.FullName});
-                args.AddRange(new [] {"--DeliveredRepo", $"{x.deploymentDir.FullName}\\Delivered"});
-                args.AddRange(new[] { "--CIRepo", $"{x.deploymentDir.FullName}\\CIPackages" });
+                args.AddRange(["--deploymentDir", x.deploymentDir.FullName]);
+                args.AddRange(["--DeliveredRepo", $"{x.deploymentDir.FullName}\\Delivered"]);
+                args.AddRange(["--CIRepo", $"{x.deploymentDir.FullName}\\CIPackages"]);
             }
             if (x.BaseVersion != null)
             {
                 args.AddRange(new [] {"--MESVersion", x.BaseVersion});
+            }
+
+            if (string.IsNullOrEmpty(x.ngxSchematicsVersion) && x.BaseVersion != null)
+            {
+                var v = Version.Parse(x.BaseVersion);
+                x.ngxSchematicsVersion = $"release-{v.Major}{v.Minor}{v.Build}";
             }
             
             args.AddRange(new [] {"--DevTasksVersion", x.DevTasksVersion ?? ""});

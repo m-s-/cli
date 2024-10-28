@@ -169,8 +169,10 @@ namespace tests.Specs
             }
         }
 
-        [Fact]
-        public void Init_Fail_MissingOptionsForGTv10()
+        [Theory]
+        [InlineData(10,2,0)]
+        [InlineData(11,0,3)]
+        public void Init_MissingOptionsForGTv10(int major, int minor, int patch)
         {
             var console = new TestConsole();
             var tmp = TestUtilities.GetTmpDirectory();
@@ -191,7 +193,7 @@ namespace tests.Specs
                 {
                     projectName,
                     "-c", TestUtilities.GetFixturePath("init", "config.json"),
-                    "--MESVersion", "10.2.0",
+                    "--MESVersion", $"{major}.{minor}.{patch}",
                     "--nugetVersion", "8.2.0",
                     "--testScenariosNugetVersion", "8.2.0",
                     "--nugetRegistry", "http://nuget.example/feed",
@@ -200,10 +202,11 @@ namespace tests.Specs
                     "--deploymentDir", deploymentDir,
                 }, console);
 
-                Assert.Contains("ngxSchematicsVersion is required", console.Error.ToString());
                 console.Error.ToString().Should().NotContain("DevTasksVersion is required");
                 console.Error.ToString().Should().NotContain("HTMLStarterVersion is required");
                 console.Error.ToString().Should().NotContain("yoGeneratorVersion is required");
+                File.ReadAllText(Path.Join(tmp, ".project-config.json"))
+                    .Should().Contain(@$"""NGXSchematicsVersion"": ""release-{major}{minor}{patch}""", "ngxSchematicsVersion was not correctly determined");
             }
             finally
             {
