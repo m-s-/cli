@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.CommandLine;
 using System.Diagnostics;
@@ -60,13 +59,11 @@ namespace Cmf.CLI.Commands
         {
             ProcessStartInfo ps = new();
             ps.FileName = this.commandPath;
-            args.ToList().ForEach(arg => ps.ArgumentList.Add(arg));
+            foreach (string arg in args)
+            {
+                ps.ArgumentList.Add(arg);
+            }
             ps.UseShellExecute = false;
-            ps.RedirectStandardOutput = true;
-            ps.RedirectStandardError = true;
-            
-            Action<string> outputHandler = Console.WriteLine;
-            Action<string> errorHandler = Log.Error;
 
             using var process = System.Diagnostics.Process.Start(ps);
             if (process == null)
@@ -74,18 +71,17 @@ namespace Cmf.CLI.Commands
                 throw new Exception("Could not spawn child command");
             }
             
-            process.ErrorDataReceived += (sender, args) => errorHandler(args.Data);
-            process.OutputDataReceived += (sender, args) => outputHandler(args.Data);
-            
-            process.BeginOutputReadLine();
-            process.BeginErrorReadLine();
-            
             Console.CancelKeyPress += (sender, eventArgs) =>
             {
                 eventArgs.Cancel = true;
                 Log.Debug("Caught SIGINT, terminating child process");
-                process.Disposed += (sender, args) => Log.Debug("Child process Disposed");
-                process.Kill(entireProcessTree: true);
+                process.Disposed += (sender2, args2) => Log.Debug("Child process Disposed");
+
+                if (!process.HasExited)
+                {
+                    process.Kill(entireProcessTree: true);
+                }
+
                 Environment.Exit(-1);
             };
             process.WaitForExit();
