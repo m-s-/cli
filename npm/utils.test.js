@@ -38,7 +38,8 @@ describe('utils.js', () => {
         test('should have correct architecture mappings', () => {
             expect(ARCH_MAPPING).toEqual({
                 ia32: 'x86',
-                x64: 'x64'
+                x64: 'x64',
+                arm64: 'arm64'
             });
         });
     });
@@ -46,7 +47,7 @@ describe('utils.js', () => {
     describe('parsePackageJson', () => {
         test('should return null for unsupported architecture', () => {
             Object.defineProperty(process, 'arch', {
-                value: 'arm64',
+                value: 'arm',
                 writable: true
             });
 

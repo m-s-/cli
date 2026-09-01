@@ -8,6 +8,7 @@ const fs = require('fs');
 var ARCH_MAPPING = {
     "ia32": "x86",
     "x64": "x64",
+    "arm64": "arm64",
     // "arm": "arm" - linux RID? can only find win-arm which is not useful
 };
 
